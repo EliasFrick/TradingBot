@@ -1,8 +1,9 @@
-import {StyleSheet} from 'react-native';
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet, Text, View} from 'react-native';
+import StandardButton from "../components/StandardButton";
 import React, {useState} from "react";
-import Sidebar from "./src/navigation/Sidebar";
 
-export default function App() {
+export default function Wallet() {
     const [btcPrice, setBtcPrice] = useState()
 
     const API_KEY = 'AUjeJu8BbGALqK2V'
@@ -30,7 +31,16 @@ export default function App() {
 
 
     return (
-        <Sidebar/>
+        <View style={styles.container}>
+            <View style={styles.balanceTextContainer}>
+                <Text style={styles.balanceText}>0 $</Text>
+            </View>
+            <View style={styles.getPriceButton}>
+                <StandardButton title={"Buy Crypto"} onPress={() => getBtcPrice(apiUrl)} fontSize={20}/>
+            </View>
+            <Text style={[{marginTop: 20}]}>{btcPrice}</Text>
+            <StatusBar style="auto"/>
+        </View>
     );
 }
 
@@ -42,7 +52,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     getPriceButton: {
-        width: "100%",
+        width: "80%",
         height: "10%"
+    },
+    balanceText: {
+        color: 'white',
+        fontSize: 30,
+    },
+    balanceTextContainer: {
+        top: '-30%'
     }
 });
