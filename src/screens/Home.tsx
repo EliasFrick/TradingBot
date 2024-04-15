@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import StandardButton from "../components/StandardButton";
 import React, {useState} from "react";
+import {config} from "../../config";
 
 type Props = {
     navigation: 'ChooseBlogScreen';
@@ -10,10 +11,8 @@ const Home: React.FC<Props> = ({navigation}) => {
     const [btcPriceEUR, setBtcPriceEUR] = useState()
     const [btcPriceUSD, setBtcPriceUSD] = useState()
 
-    const API_KEY = 'AUjeJu8BbGALqK2V'
-    const API_SECRET = 'SZDg43KiHRxLZnI7dW6frDhxkjjgcF2l'
-
-
+    const API_KEY = config.API_KEY
+    const API_SECRET = config.API_SECRET
     async function getBtcPrice(currency: string): Promise<any> {
         try {
             const response = await fetch(getBitcoinPriceUrl(currency));

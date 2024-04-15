@@ -2,11 +2,9 @@ import {StyleSheet} from 'react-native';
 import React, {useState} from "react";
 import Sidebar from "./src/navigation/Sidebar";
 
+
 export default function App() {
     const [btcPrice, setBtcPrice] = useState()
-
-    const API_KEY = 'AUjeJu8BbGALqK2V'
-    const API_SECRET = 'SZDg43KiHRxLZnI7dW6frDhxkjjgcF2l'
 
 
     async function getBtcPrice(url: string): Promise<any> {
