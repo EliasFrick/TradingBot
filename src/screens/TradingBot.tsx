@@ -16,13 +16,6 @@ const Home: React.FC<Props> = ({navigation}) => {
     async function getBtcPrice(currency: string): Promise<any> {
         try {
             const response = await fetch(getBitcoinPriceUrl(currency));
-            console.log("Test")
-            // var client = new Client({'apiKey': API_KEY,
-            //     'apiSecret': API_SECRET});
-
-            // client.getBuyPrice({'currencyPair': 'BTC-USD'}, function(err: any, price: any) {
-            //     console.log("api: " + price);
-            // });
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -51,14 +44,7 @@ const Home: React.FC<Props> = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.balanceTextContainer}>
-                <Text style={styles.balanceText}>BTC €: {btcPriceEUR}</Text>
-                <Text style={styles.balanceText}>BTC $: {btcPriceUSD}</Text>
-            </View>
-            <View style={styles.getPriceButton}>
-                <StandardButton title={"Bitcoin €"} onPress={() => getBtcPrice("EUR")} fontSize={25}/>
-                <StandardButton title={"Bitcoin $"} onPress={() => getBtcPrice("USD")} fontSize={25}/>
-            </View>
+            <Text>Bot</Text>
         </View>
     );
 }

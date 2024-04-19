@@ -1,6 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import Wallet from "../screens/Wallet";
 import Home from "../screens/Home";
+import Analyse from "../screens/Analyse";
+import TradingBot from "../screens/TradingBot";
 
 const Stack = createStackNavigator();
 
@@ -28,3 +30,26 @@ export function BuyCryptoScreen() {
     );
 }
 
+export function TradingBotScreen() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name="TradingBotScreen"
+                component={TradingBot}
+                options={{ headerShown: false }}
+            />
+        </Stack.Navigator>
+    );
+}
+
+export function AnalyseScreen() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name="AnalyseScreen"
+                component={Analyse}
+                options={{ headerShown: false }}
+            />
+        </Stack.Navigator>
+    );
+}

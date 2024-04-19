@@ -3,7 +3,7 @@ import {NavigationContainer} from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {BuyCryptoScreen, HomeScreen} from "./ChooseStackScreen";
+import {AnalyseScreen, BuyCryptoScreen, HomeScreen, TradingBotScreen} from "./ChooseStackScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,9 +20,15 @@ const Sidebar: React.FC = () => {
                         if (route.name === "Home") {
                             size = focused ? 35 : 25;
                             return <Ionicons name={"home"} size={size} color={color}/>;
+                        } else if (route.name === "TradingBot") {
+                            size = focused ? 35 : 25;
+                            return <Ionicons name={"skull"} size={size} color={color}/>;
+                        } else if (route.name === "Analyse") {
+                            size = focused ? 35 : 25;
+                            return <Ionicons name={"analytics-sharp"} size={size} color={color}/>;
                         } else if (route.name === "Wallet") {
                             size = focused ? 35 : 25;
-                            return <Ionicons name={"card"} size={size} color={color}/>;
+                            return <Ionicons name={"wallet"} size={size} color={color}/>;
                         }
                     },
                     tabBarInactiveBackgroundColor: "#161616",
@@ -44,6 +50,14 @@ const Sidebar: React.FC = () => {
                 <Tab.Screen
                     name="Home"
                     component={HomeScreen}
+                />
+                <Tab.Screen
+                    name="TradingBot"
+                    component={TradingBotScreen}
+                />
+                <Tab.Screen
+                    name="Analyse"
+                    component={AnalyseScreen}
                 />
                 <Tab.Screen
                     name="Wallet"
