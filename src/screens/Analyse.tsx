@@ -1,11 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {coinbaseConfig} from "../../config";
 import {LineGraph} from "react-native-graph";
 import {generateRandomGraphData,} from '../components/GrapthData'
 import * as hapticFeedback from 'expo-haptics';
 import ToggleGraphButton from "../components/ToggleGraphButton";
-import {IToggleGraphButtonConfig, IGraphPoint} from "../types/types";
+import {IGraphPoint, IToggleGraphButtonConfig} from "../types/types";
 import axios from "axios";
 
 type Props = {
@@ -57,7 +57,7 @@ const Home: React.FC<Props> = ({navigation}) => {
     const [graphData, setGraphData] = useState<IGraphPoint[]>([])
     const [startDate, setStartDate] = useState<any>()
     const [endDate, setDndDate] = useState<any>()
-    const [priceTitle, setPriceTitle] = useState<any>()
+    const [priceTitle, setPriceTitle] = useState<any>(0)
 
     const coinbaseUrl = 'https://api.coinbase.com/v2/prices/';
     const coinbaseUrlBTC = 'https://api.coinbase.com/v2/prices/BTC-USD/historic?period=';
@@ -65,47 +65,22 @@ const Home: React.FC<Props> = ({navigation}) => {
 
     const paragraphData: IGraphPoint[] = []
 
-    const exampleGraphPoint = [
-        {
-            date: new Date('2000-01-01T00:00:00.000Z'),
-            value: 20
-        },
-        {
-            date: new Date('2000-01-02T00:00:00.000Z'),
-            value: 30
-        },
-        {
-            date: new Date('2000-01-03T00:00:00.000Z'),
-            value: 40
-        },
-        {
-            date: new Date('2000-01-04T00:00:00.000Z'),
-            value: 10
-        },
-        {
-            date: new Date('2000-01-05T00:00:00.000Z'),
-            value: 5
-        }
-        ,
-        {
-            date: new Date('2000-01-06T00:00:00.000Z'),
-            value: 15
-        }
-        ,
-        {
-            date: new Date('2000-01-07T00:00:00.000Z'),
-            value: 2
-        }
-    ];
-
     const updatePriceTitle = (p: any) => {
         setPriceTitle(Number(p.value))
     }
 
     const resetPriceTitle = (p: any) => {
-        // console.log("End")
-        // console.log(p)
+        setPriceTitle(Number(graphData[graphData.length - 1].value))
     }
+
+    useEffect(() => {
+        setOneHourConfig(prevConfig => ({
+            ...prevConfig,
+            fontsize: 20,
+            color: 'red'
+        }));
+        getBtcPrice("hour")
+    }, []);
 
     const selectRange = (range: string) => {
         findAndResetFontSize()
@@ -244,26 +219,25 @@ const Home: React.FC<Props> = ({navigation}) => {
             paragraphData.push({date: new Date(Number(data.time) * 1000), value: data.price})
         });
 
-        setGraphData(paragraphData)
+        setGraphData(paragraphData.reverse())
     }
 
     return (
         <View style={styles.container}>
-            <Text style={[{color: 'white'}]}>Bitcoin</Text>
             <Text style={[{color: 'white', fontSize: 25}]}>{priceTitle}</Text>
             {/*<View style={styles.graphContainer}>*/}
-                <LineGraph
-                    style={styles.miniGraph}
-                    animated={true}
-                    color={"#4484B2"}
-                    points={graphData}
-                    enablePanGesture={true}
-                    panGestureDelay={0}
-                    onGestureStart={() => hapticFeedback.selectionAsync()}
-                    onPointSelected={(p) => updatePriceTitle(p)}
-                    onGestureEnd={() => resetPriceTitle(points)}
-                    // SelectionDot={SelectionDot}
-                />
+            <LineGraph
+                style={styles.miniGraph}
+                animated={true}
+                color={"#fff"}
+                points={graphData}
+                enablePanGesture={true}
+                panGestureDelay={0}
+                onGestureStart={() => hapticFeedback.selectionAsync()}
+                onPointSelected={(p) => updatePriceTitle(p)}
+                onGestureEnd={() => resetPriceTitle(points)}
+                // SelectionDot={SelectionDot}
+            />
             {/*</View>*/}
             <View style={styles.ToggleGraphButtonContainer}>
                 <ToggleGraphButton onPress={() => selectRange('oneHour')} title={oneHourConfig.title}
@@ -274,14 +248,14 @@ const Home: React.FC<Props> = ({navigation}) => {
                                    color={oneWeekConfig.color} fontsize={oneWeekConfig.fontsize}/>
                 <ToggleGraphButton onPress={() => selectRange('oneMonth')} title={oneMonthConfig.title}
                                    color={oneMonthConfig.color} fontsize={oneMonthConfig.fontsize}/>
-                <ToggleGraphButton onPress={() => selectRange('threeMonth')} title={threeMonthConfig.title}
-                                   color={threeMonthConfig.color} fontsize={threeMonthConfig.fontsize}/>
-                <ToggleGraphButton onPress={() => selectRange('sixMonth')} title={sixMonthConfig.title}
-                                   color={sixMonthConfig.color} fontsize={sixMonthConfig.fontsize}/>
+                {/*<ToggleGraphButton onPress={() => selectRange('threeMonth')} title={threeMonthConfig.title}*/}
+                {/*                   color={threeMonthConfig.color} fontsize={threeMonthConfig.fontsize}/>*/}
+                {/*<ToggleGraphButton onPress={() => selectRange('sixMonth')} title={sixMonthConfig.title}*/}
+                {/*                   color={sixMonthConfig.color} fontsize={sixMonthConfig.fontsize}/>*/}
                 <ToggleGraphButton onPress={() => selectRange('oneYear')} title={oneYearConfig.title}
                                    color={oneYearConfig.color} fontsize={oneYearConfig.fontsize}/>
-                <ToggleGraphButton onPress={() => selectRange('max')} title={maxConfig.title} color={maxConfig.color}
-                                   fontsize={maxConfig.fontsize}/>
+                {/*<ToggleGraphButton onPress={() => selectRange('max')} title={maxConfig.title} color={maxConfig.color}*/}
+                {/*                   fontsize={maxConfig.fontsize}/>*/}
             </View>
         </View>
     );
