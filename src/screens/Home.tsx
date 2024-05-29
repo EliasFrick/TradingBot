@@ -7,12 +7,15 @@ type Props = {
     navigation: 'ChooseBlogScreen';
 };
 
+
+// DOKU DOKU DOKU DOKU DOKU
+//  https://blog.finxter.com/coinbase-api-getting-historical-price-for-multiple-days-made-easy/
+
+
 const Home: React.FC<Props> = ({navigation}) => {
     const [btcPriceEUR, setBtcPriceEUR] = useState()
     const [btcPriceUSD, setBtcPriceUSD] = useState()
 
-    const API_KEY = coinbaseConfig.API_KEY
-    const API_SECRET = coinbaseConfig.API_SECRET
     async function getBtcPrice(currency: string): Promise<any> {
         try {
             const response = await fetch(getBitcoinPriceUrl(currency));
@@ -25,7 +28,7 @@ const Home: React.FC<Props> = ({navigation}) => {
             // });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                new Error('Network response was not ok');
             }
 
             const data = await response.json();
@@ -47,7 +50,6 @@ const Home: React.FC<Props> = ({navigation}) => {
         return `https://api.coinbase.com/v2/prices/BTC-${currency}/sell`;
 
     }
-    const apiUrl = 'https://api.coinbase.com/v2/prices/BTC-USD/sell';
 
     return (
         <View style={styles.container}>

@@ -3,6 +3,7 @@ import Wallet from "../screens/Wallet";
 import Home from "../screens/Home";
 import Analyse from "../screens/Analyse";
 import TradingBot from "../screens/TradingBot";
+import ProfileSettings from "../screens/ProfileSettings";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,11 @@ export function BuyCryptoScreen() {
             <Stack.Screen
                 name="WalletScreen"
                 component={Wallet}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ProfileSettingsScreen"
+                component={ProfileSettings}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

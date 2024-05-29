@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import {NavigationContainer} from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
+import {Text} from 'react-native'
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {AnalyseScreen, BuyCryptoScreen, HomeScreen, TradingBotScreen} from "./ChooseStackScreen";
+import {LabelPosition} from "@react-navigation/bottom-tabs/lib/typescript/src/types";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,6 +16,7 @@ const Sidebar: React.FC = () => {
             <Tab.Navigator
                 screenOptions={({route}) => ({
                     headerTitleAlign: "center",
+                    headerShown: false,
                     headerShadowVisible: true,
                     tabBarIcon: ({focused, color, size}) => {
                         if (route.name === "Home") {
@@ -35,9 +37,14 @@ const Sidebar: React.FC = () => {
                     tabBarActiveBackgroundColor: "#161616",
                     tabBarActiveTintColor: "red",
                     headerTintColor: "white",
-                    tabBarLabel: "",
+                    tabBarLabel: ({focused, color, position, children}) => {
+                        if (focused) {
+                            return <Text style={{ color }}>{children}</Text>;
+                        }
+                        return null;
+                    },
                     tabBarLabelStyle: {
-                        color: "green",
+                        color: "red",
                     },
                     headerStyle: {
                         backgroundColor: "#161616",

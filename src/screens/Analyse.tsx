@@ -1,23 +1,17 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from "react";
-import {coinbaseConfig} from "../../config";
+import React, {useLayoutEffect, useState} from "react";
 import {LineGraph} from "react-native-graph";
-import {generateRandomGraphData,} from '../components/GrapthData'
 import * as hapticFeedback from 'expo-haptics';
 import ToggleGraphButton from "../components/ToggleGraphButton";
-import {IGraphPoint, IToggleGraphButtonConfig} from "../types/types";
+import {IGraphPoint, IToggleGraphButtonConfig} from "../types/interfaces";
 import axios from "axios";
 
 type Props = {
     navigation: 'ChooseBlogScreen';
 };
 
-const Home: React.FC<Props> = ({navigation}) => {
+const Analyse: React.FC<Props> = ({navigation}) => {
 
-    const CoinbaseAPI_KEY = coinbaseConfig.API_KEY
-    const CoinbaseAPI_SECRET = coinbaseConfig.API_SECRET
-    const POINTS = generateRandomGraphData(70)
-    const [points, setPoints] = useState(POINTS)
     const [oneHourConfig, setOneHourConfig] = useState<IToggleGraphButtonConfig>({
         title: '1H',
         color: 'white',
@@ -55,25 +49,27 @@ const Home: React.FC<Props> = ({navigation}) => {
     });
     const [maxConfig, setMaxConfig] = useState<IToggleGraphButtonConfig>({title: 'MAX', color: 'white', fontsize: 17});
     const [graphData, setGraphData] = useState<IGraphPoint[]>([])
-    const [startDate, setStartDate] = useState<any>()
-    const [endDate, setDndDate] = useState<any>()
     const [priceTitle, setPriceTitle] = useState<any>(0)
 
     const coinbaseUrl = 'https://api.coinbase.com/v2/prices/';
     const coinbaseUrlBTC = 'https://api.coinbase.com/v2/prices/BTC-USD/historic?period=';
-    const alpacaUrl = 'https://api.alpaca.markets';
 
     const paragraphData: IGraphPoint[] = []
 
     const updatePriceTitle = (p: any) => {
-        setPriceTitle(Number(p.value))
+        if (p && p.value !== undefined) {
+            setPriceTitle(Number(p.value));
+        }
     }
 
-    const resetPriceTitle = (p: any) => {
-        setPriceTitle(Number(graphData[graphData.length - 1].value))
+    const resetPriceTitle = () => {
+        if (graphData.length > 0 && graphData[graphData.length - 1].value !== undefined) {
+            setPriceTitle(Number(graphData[graphData.length - 1].value));
+        }
     }
 
-    useEffect(() => {
+
+    useLayoutEffect(() => {
         setOneHourConfig(prevConfig => ({
             ...prevConfig,
             fontsize: 20,
@@ -224,50 +220,57 @@ const Home: React.FC<Props> = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={[{color: 'white', fontSize: 25}]}>{priceTitle}</Text>
-            {/*<View style={styles.graphContainer}>*/}
-            <LineGraph
-                style={styles.miniGraph}
-                animated={true}
-                color={"#fff"}
-                points={graphData}
-                enablePanGesture={true}
-                panGestureDelay={0}
-                onGestureStart={() => hapticFeedback.selectionAsync()}
-                onPointSelected={(p) => updatePriceTitle(p)}
-                onGestureEnd={() => resetPriceTitle(points)}
-                // SelectionDot={SelectionDot}
-            />
-            {/*</View>*/}
-            <View style={styles.ToggleGraphButtonContainer}>
-                <ToggleGraphButton onPress={() => selectRange('oneHour')} title={oneHourConfig.title}
-                                   color={oneHourConfig.color} fontsize={oneHourConfig.fontsize}/>
-                <ToggleGraphButton onPress={() => selectRange('oneDay')} title={oneDayConfig.title}
-                                   color={oneDayConfig.color} fontsize={oneDayConfig.fontsize}/>
-                <ToggleGraphButton onPress={() => selectRange('oneWeek')} title={oneWeekConfig.title}
-                                   color={oneWeekConfig.color} fontsize={oneWeekConfig.fontsize}/>
-                <ToggleGraphButton onPress={() => selectRange('oneMonth')} title={oneMonthConfig.title}
-                                   color={oneMonthConfig.color} fontsize={oneMonthConfig.fontsize}/>
-                {/*<ToggleGraphButton onPress={() => selectRange('threeMonth')} title={threeMonthConfig.title}*/}
-                {/*                   color={threeMonthConfig.color} fontsize={threeMonthConfig.fontsize}/>*/}
-                {/*<ToggleGraphButton onPress={() => selectRange('sixMonth')} title={sixMonthConfig.title}*/}
-                {/*                   color={sixMonthConfig.color} fontsize={sixMonthConfig.fontsize}/>*/}
-                <ToggleGraphButton onPress={() => selectRange('oneYear')} title={oneYearConfig.title}
-                                   color={oneYearConfig.color} fontsize={oneYearConfig.fontsize}/>
-                {/*<ToggleGraphButton onPress={() => selectRange('max')} title={maxConfig.title} color={maxConfig.color}*/}
-                {/*                   fontsize={maxConfig.fontsize}/>*/}
+            <View style={styles.innerContainer}>
+                <Text style={[{color: 'white', fontSize: 25, marginTop: 20}]}>{priceTitle}</Text>
+                <View style={styles.graphContainer}>
+                    <LineGraph
+                        style={styles.miniGraph}
+                        animated={true}
+                        color={"#4ce87a"}
+                        points={graphData}
+                        enablePanGesture={true}
+                        panGestureDelay={0}
+                        onGestureStart={() => hapticFeedback.selectionAsync()}
+                        onPointSelected={(p) => updatePriceTitle(p)}
+                        onGestureEnd={() => resetPriceTitle()}
+                        // SelectionDot={SelectionDot}
+                    />
+                </View>
+                <View style={styles.ToggleGraphButtonContainer}>
+                    <ToggleGraphButton onPress={() => selectRange('oneHour')} title={oneHourConfig.title}
+                                       color={oneHourConfig.color} fontsize={oneHourConfig.fontsize}/>
+                    <ToggleGraphButton onPress={() => selectRange('oneDay')} title={oneDayConfig.title}
+                                       color={oneDayConfig.color} fontsize={oneDayConfig.fontsize}/>
+                    <ToggleGraphButton onPress={() => selectRange('oneWeek')} title={oneWeekConfig.title}
+                                       color={oneWeekConfig.color} fontsize={oneWeekConfig.fontsize}/>
+                    <ToggleGraphButton onPress={() => selectRange('oneMonth')} title={oneMonthConfig.title}
+                                       color={oneMonthConfig.color} fontsize={oneMonthConfig.fontsize}/>
+                    {/*<ToggleGraphButton onPress={() => selectRange('threeMonth')} title={threeMonthConfig.title}*/}
+                    {/*                   color={threeMonthConfig.color} fontsize={threeMonthConfig.fontsize}/>*/}
+                    {/*<ToggleGraphButton onPress={() => selectRange('sixMonth')} title={sixMonthConfig.title}*/}
+                    {/*                   color={sixMonthConfig.color} fontsize={sixMonthConfig.fontsize}/>*/}
+                    <ToggleGraphButton onPress={() => selectRange('oneYear')} title={oneYearConfig.title}
+                                       color={oneYearConfig.color} fontsize={oneYearConfig.fontsize}/>
+                    {/*<ToggleGraphButton onPress={() => selectRange('max')} title={maxConfig.title} color={maxConfig.color}*/}
+                    {/*                   fontsize={maxConfig.fontsize}/>*/}
+                </View>
             </View>
         </View>
     );
 }
 
-export default Home;
+export default Analyse;
 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#161616',
+    },
+    innerContainer: {
+        marginTop: 30,
+        width: '100%',
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -285,7 +288,7 @@ const styles = StyleSheet.create({
     diagramContainer: {},
     miniGraph: {
         width: '100%',
-        height: '80%',
+        height: '100%',
         marginLeft: 5,
     },
     controlsScrollView: {
@@ -303,6 +306,6 @@ const styles = StyleSheet.create({
     },
     graphContainer: {
         width: '90%',
-        height: '100%'
+        height: '80%'
     }
 });
